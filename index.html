@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEME - Agendamentos</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_corrigido.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
@@ -230,7 +230,7 @@
     </main>
 
   <!-- ═══════════════════════════════════════ MODAL: COMUNICADO -->
-    <div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="comunicadoTitulo" style="display: none;">
+    <div class="modal-overlay" id="comunicadoModal" role="dialog" aria-modal="true" aria-labelledby="comunicadoTitulo">
         <div class="modal-card">
             <div class="modal-icon">
                 <svg viewBox="0 0 24 24">
@@ -248,45 +248,34 @@
                 Obrigado.
             </p>
             <div class="modal-actions">
-                <button type="button" class="modal-btn modal-btn-ghost" id="modalNotLogged">Continuar</button>
+                <button type="button" class="modal-btn modal-btn-ghost" id="btnContinuarComunicado">Continuar</button>
             </div>
         </div>
     </div>
-
-
-    
     <script src="script.js"></script>
     <script>
-        // Exibe o comunicado na primeira visita de cada sessão do navegador.
-        document.addEventListener('DOMContentLoaded', function () {
-            const modal = document.getElementById('loginModal');
-            const continuar = document.getElementById('modalNotLogged');
-            const chave = 'seme_comunicado_edital_133_2026_visto';
+      (() => {
+        const modal = document.getElementById('comunicadoModal');
+        const botao = document.getElementById('btnContinuarComunicado');
+        const chave = 'seme_comunicado_edital_133_2026_visto';
+        if (!modal || !botao) return;
 
-            if (!modal || !continuar) return;
+        let visto = false;
+        try { visto = sessionStorage.getItem(chave) === '1'; } catch (e) {}
 
-            let jaVisto = false;
-            try {
-                jaVisto = sessionStorage.getItem(chave) === 'true';
-            } catch (erro) {
-                // Se o armazenamento estiver bloqueado, exibe o comunicado normalmente.
-            }
+        if (!visto) {
+          modal.classList.add('show');
+          document.body.style.overflow = 'hidden';
+        }
 
-            if (!jaVisto) {
-                modal.style.display = 'flex';
-                continuar.focus();
-            }
-
-            continuar.addEventListener('click', function () {
-                modal.style.display = 'none';
-                try {
-                    sessionStorage.setItem(chave, 'true');
-                } catch (erro) {
-                    // Mantém o fechamento funcionando mesmo sem armazenamento.
-                }
-            });
+        botao.addEventListener('click', () => {
+          modal.classList.remove('show');
+          document.body.style.overflow = '';
+          try { sessionStorage.setItem(chave, '1'); } catch (e) {}
         });
+      })();
     </script>
+
 
 
 
