@@ -829,3 +829,14 @@ button[type="submit"]#btnCancelar:active {
         padding: 24px 20px;
     }
 }
+/* Comunicado institucional: visível apenas quando JS adiciona .show */
+#comunicadoModal.show {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    z-index: 9999;
+}
+#comunicadoModal .modal-card {
+    max-height: min(90vh, 850px);
+    overflow-y: auto;
+}
