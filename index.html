@@ -230,7 +230,7 @@
     </main>
 
   <!-- ═══════════════════════════════════════ MODAL: COMUNICADO -->
-    <div class="modal-overlay" id="loginModal">
+    <div class="modal-overlay" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="comunicadoTitulo" style="display: none;">
         <div class="modal-card">
             <div class="modal-icon">
                 <svg viewBox="0 0 24 24">
@@ -240,15 +240,15 @@
                     <line x1="12" y1="17" x2="12.01" y2="17" />
                 </svg>
             </div>
-            <h3>Atenção</h3>
-            <p><strong>COMUNICADO – AGENDAMENTO DE ATENDIMENTO</strong>strong><br>
+            <h3 id="comunicadoTitulo">Atenção</h3>
+            <p><strong>COMUNICADO – AGENDAMENTO DE ATENDIMENTO</strong><br>
                 Informamos que, conforme disposto no item 5.13 do Edital nº 133/2026, referente ao Processo Seletivo, a Secretaria Municipal de Educação de Cabo Frio não emitirá declarações de tempo de serviço, exceto nos casos referentes a unidades escolares extintas.<br><br>
                 Dessa forma, o agendamento de atendimento deverá ser realizado exclusivamente por aqueles que necessitem de declarações de tempo de serviço referentes a unidades escolares extintas.<br><br>
                 Solicitamos que observem essa orientação antes de realizar o agendamento.<br>
                 Obrigado.
             </p>
             <div class="modal-actions">
-                <button class="modal-btn modal-btn-ghost" id="modalNotLogged">Continuar</button>
+                <button type="button" class="modal-btn modal-btn-ghost" id="modalNotLogged">Continuar</button>
             </div>
         </div>
     </div>
@@ -256,6 +256,40 @@
 
     
     <script src="script.js"></script>
+    <script>
+        // Exibe o comunicado na primeira visita de cada sessão do navegador.
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('loginModal');
+            const continuar = document.getElementById('modalNotLogged');
+            const chave = 'seme_comunicado_edital_133_2026_visto';
+
+            if (!modal || !continuar) return;
+
+            let jaVisto = false;
+            try {
+                jaVisto = sessionStorage.getItem(chave) === 'true';
+            } catch (erro) {
+                // Se o armazenamento estiver bloqueado, exibe o comunicado normalmente.
+            }
+
+            if (!jaVisto) {
+                modal.style.display = 'flex';
+                continuar.focus();
+            }
+
+            continuar.addEventListener('click', function () {
+                modal.style.display = 'none';
+                try {
+                    sessionStorage.setItem(chave, 'true');
+                } catch (erro) {
+                    // Mantém o fechamento funcionando mesmo sem armazenamento.
+                }
+            });
+        });
+    </script>
+
+
+
 </body>
 
 </html>
